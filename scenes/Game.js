@@ -32,6 +32,7 @@ export default class Game extends Phaser.Scene {
     const belowLayer = map.createLayer("Fondo", tileset, 0, 0);
     const platformLayer = map.createLayer("Plataformas", tileset, 0, 0);
     const objectsLayer = map.getObjectLayer("Objetos");
+    const collisionLayer = map.createLayer("colisiones", tileset, 0, 0);
 
     // Find in the Object Layer, the name "dude" and get position
     const spawnPoint = map.findObject(
@@ -70,6 +71,12 @@ export default class Game extends Phaser.Scene {
 
     platformLayer.setCollisionByProperty({ esColisionable: true });
     this.physics.add.collider(this.player, platformLayer);
+    
+    collisionLayer.setCollisionByProperty({ esColisionable: true });
+    this.physics.add.collider(this.player, collisionLayer);
+
+    collisionLayer.setVisible(false);
+
 
     // tiles marked as colliding
     /*
