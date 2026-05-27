@@ -7,6 +7,7 @@ export default class Game extends Phaser.Scene {
 
   init() {
     this.score = 0;
+    this.timeLeft = 30;
   }
 
   preload() {
@@ -114,6 +115,18 @@ export default class Game extends Phaser.Scene {
       fontSize: "32px",
       fill: "#000",
     });
+
+    this.timerText = this.add.text(16, 56, `Time: ${this.timeLeft}`, {
+      fontSize: "32px",
+      fill: "#000",
+    });
+
+    this.timerEvent = this.time.addEvent({
+      delay: 1000,
+      callback: this.updateTimer,
+      callbackScope: this,
+      loop: true,
+    });
   }
 
   update() {
@@ -153,6 +166,18 @@ export default class Game extends Phaser.Scene {
       this.stars.children.iterate(function (child) {
         child.enableBody(true, child.x, 0, true, true);
       });
+    }
+  }
+
+  updateTimer() {
+    this.timeLeft -= 1;
+    this.timerText.setText(`Time: ${this.timeLeft}`);
+
+    if (this.timeLeft <= 0) {
+      if (this.timerEvent) {
+        this.timerEvent.remove(false);
+      }
+      this.scene.restart();
     }
   }
 }
